@@ -6,7 +6,6 @@ export default function News() {
   const [article, setArticle] = useState({
     articles: [],
     loading: false,
-    page: 1,
   });
   const prePage = () => {
     setPage(Page - 1);
@@ -45,7 +44,7 @@ export default function News() {
       <div className="row my-3">
         {article.articles.map((element) => {
           return (
-            <div className="col-md-3 mx-1" key={element.url}>
+            <div className="col-md-3 mx-2" key={element.url}>
               <NewsItem
                 title={element.title}
                 description={element.description}
