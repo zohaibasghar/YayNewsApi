@@ -1,48 +1,50 @@
 import React, { useState, useEffect } from "react";
+import Loading from "./Loading";
 import NewsItem from "./NewsItem";
 
-export default function News() {
+export default function News(props) {
   const [Page, setPage] = useState(1);
+  const [loading, setloading] = useState(true);
   const [article, setArticle] = useState({
     articles: [],
-    loading: false,
+    totalResults: 0,
   });
-  const prePage = () => {
-    setPage(Page - 1);
-    console.log(Page);
-  };
-  const nextPage = () => {
-    setPage(Page + 1);
-    console.log(Page);
-  };
   let dataMount = async (p) => {
-    var url = `https://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=461e8a97f3e2489cbf66ced97f13eb09&page=${p}&pageSize=20`;
+    var url = `https://newsapi.org/v2/top-headlines?country=us&category=business&apiKey=461e8a97f3e2489cbf66ced97f13eb09&page=${p}&pageSize=${props.pageSize}`;
     let data = await fetch(url);
     let parsedData = await data.json();
-    setArticle({ articles: parsedData.articles });
+    setArticle({
+      articles: parsedData.articles,
+      totalResults: parsedData.totalResults,
+    });
+    setloading(false);
     console.log(parsedData);
   };
   async function prePagefun() {
-    prePage();
+    setloading(true);
+    setPage(Page - 1);
     dataMount(Page);
     window.scroll(0, 0);
   }
   async function nextPagefun() {
-    nextPage();
+    setloading(true);
+    setPage(Page + 1);
     dataMount(Page);
     window.scroll(0, 0);
   }
   useEffect(() => {
-    async function fetchData(Page){
+    async function fetchData(Page) {
       await dataMount(Page);
     }
-    fetchData(Page)
+    fetchData(Page);
   }, [Page]);
+  console.log(article);
   return (
     <div className="container my-3">
       <h2 className="text-center">Yay News - Top headlines</h2>
+      {loading && <Loading/>}
       <div className="row my-3">
-        {article.articles.map((element) => {
+        {!loading && article.articles.map((element) => {
           return (
             <div className="col-md-3 mx-2" key={element.url}>
               <NewsItem
@@ -70,7 +72,7 @@ export default function News() {
         </button>
         <button
           type="button"
-          disabled={Page === Math.ceil(article.articles.totalResults / 20) + 1}
+          disabled={Page === Math.ceil(article.totalResults / 20)}
           className="btn btn-dark"
           onClick={nextPagefun}
         >
