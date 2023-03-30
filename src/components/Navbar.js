@@ -1,7 +1,13 @@
 import React from "react";
 import { Link } from "react-router-dom";
-
+import News from './News';
 export default function Navbar(props) {
+  const activeClass=(id)=>{
+    Array.from(document.getElementsByClassName('nav-link')).map((nav)=>{
+      nav.classList.remove('active')
+    })
+    document.getElementById(id).classList.add('active')
+  }
   return (
     <div>
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -25,12 +31,12 @@ export default function Navbar(props) {
               <li className="nav-item">
                 <Link
                   onClick={() => {
-                    props.categoryMenu("business");
+                    activeClass('business');
                   }}
                   id="business"
-                  className="nav-link active links"
+                  className="nav-link active"
                   aria-current="page"
-                  to="/"
+                  to="/business"
                 >
                   Business
                 </Link>
@@ -38,11 +44,11 @@ export default function Navbar(props) {
               <li className="nav-item">
                 <Link
                   onClick={() => {
-                    props.categoryMenu("sports");
+                    activeClass('sports')
                   }}
                   id="sports"
-                  className="nav-link links"
-                  href="/"
+                  className="nav-link"
+                  to="/sports"
                 >
                   Sports
                 </Link>
@@ -50,11 +56,11 @@ export default function Navbar(props) {
               <li className="nav-item">
                 <Link
                   onClick={() => {
-                    props.categoryMenu("technology");
+                    activeClass('technology')
                   }}
                   id="technology"
-                  className="nav-link links"
-                  href="/"
+                  className="nav-link"
+                  to="/technology"
                 >
                   Technology
                 </Link>
@@ -62,13 +68,37 @@ export default function Navbar(props) {
               <li className="nav-item">
                 <Link
                   onClick={() => {
-                    props.categoryMenu("everything");
+                    activeClass('entertainment')
                   }}
-                  id="everthing"
-                  className="nav-link links"
-                  href="/"
+                  id="entertainment"
+                  className="nav-link"
+                  to="/entertainment"
                 >
-                  Everything
+                  Entertainment
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link
+                  onClick={() => {
+                    activeClass('science')
+                  }}
+                  id="science"
+                  className="nav-link"
+                  to="/science"
+                >
+                  Science
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link
+                  onClick={() => {
+                    activeClass('health')
+                  }}
+                  id="health"
+                  className="nav-link"
+                  to="/health"
+                >
+                  Health
                 </Link>
               </li>
             </ul>

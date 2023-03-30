@@ -2,7 +2,7 @@ import React from "react";
 
 export default function Loading() {
   return (
-    <div className="loading my-4">
+    <div className="loading my-5">
       <svg height="24" width="24" viewBox="0 0 32 32">
         <g fill="#000000">
           <path

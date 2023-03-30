@@ -1,4 +1,4 @@
-.card-text {
+.card-text,.card-title {
   text-overflow: ellipsis;
   overflow: hidden;
   display: -webkit-box !important;
