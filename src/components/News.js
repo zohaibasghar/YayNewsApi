@@ -15,7 +15,7 @@ export default function News(props) {
   });
 
   let category = useSelector((state) => state.category.category);
-  let api = "238f2b969d1c4e9590d49f331dd0480e";
+  let api = "461e8a97f3e2489cbf66ced97f13eb09";
 
   useEffect(() => {
     let dataMount = async () => {
