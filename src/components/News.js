@@ -1,58 +1,65 @@
 import React, { useState, useEffect } from "react";
 import InfiniteScroll from "react-infinite-scroll-component";
+import { useDispatch, useSelector } from "react-redux";
+import { loadingActions } from "../features/loadingBar/loadingProgressSlice";
 import Loading from "./Loading";
 import NewsItem from "./NewsItem";
 
 export default function News(props) {
-  const [Page, setPage] = useState(1);
+  let [Page, setPage] = useState(1);
+  const dispatch = useDispatch();
   const [loading, setloading] = useState(true);
   const [article, setArticle] = useState({
     articles: [],
     totalResults: 0,
   });
-  let api = "461e8a97f3e2489cbf66ced97f13eb09";
-  // console.log(props.newsCat);
-  let dataMount = async () => {
-    props.setProgress(10);
-    document.title = `${
-      props.newsCat[0].toUpperCase() + props.newsCat.slice(1)
-    } | Yay News`;
-    var url = `https://newsapi.org/v2/top-headlines?country=us&category=${props.newsCat}&apiKey=${api}&page=${Page}&pageSize=${props.pageSize}`;
-    let data = await fetch(url);
-    props.setProgress(30);
-    var parsedData = await data.json();
-    props.setProgress(50);
-    console.log(url);
-    setArticle({
-      articles: parsedData.articles,
-      totalResults: parsedData.totalResults,
-    });
-    setloading(false);
-    props.setProgress(100);
-    console.log(parsedData);
-    setPage(Page + 1);
-  };
+
+  let category = useSelector((state) => state.category.category);
+  let api = "238f2b969d1c4e9590d49f331dd0480e";
+
   useEffect(() => {
+    let dataMount = async () => {
+      document.title = `${
+        category[0].toUpperCase() + category.slice(1)
+      } | Yay News`;
+      dispatch(loadingActions.proChange(10));
+      let url = `https://newsapi.org/v2/top-headlines?country=us&category=${
+        window.location.pathname.split("/")[1] || category
+      }&apiKey=${api}&page=${Page}&pageSize=${15}`;
+      let data = await fetch(url);
+      dispatch(loadingActions.proChange(30));
+      let parsedData = await data.json();
+      dispatch(loadingActions.proChange(50));
+      setArticle({
+        ...article,
+        articles: parsedData.articles,
+        totalResults: parsedData.totalResults,
+      });
+      setloading(false);
+      dispatch(loadingActions.proChange(100));
+      setPage(Page++);
+    };
     dataMount();
-  });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [category]);
+
   const fetchMoreData = async () => {
-    console.log("fetch more data");
-    var url = `https://newsapi.org/v2/top-headlines?country=us&category=${props.newsCat}&apiKey=${api}&page=${Page}&pageSize=${props.pageSize}`;
-    console.log(url);
+    let url = `https://newsapi.org/v2/top-headlines?country=us&category=${category}&apiKey=${api}&page=${Page}&pageSize=${props.pageSize}`;
     let data = await fetch(url);
-    var parsedData = await data.json();
+    let parsedData = await data.json();
     setArticle({
+      ...article,
       articles: article.articles.concat(parsedData.articles),
       totalResults: parsedData.totalResults,
     });
     setPage(Page + 1);
-    console.log(article);
   };
+
   return (
     <div className="container">
       <h2 className="text-center my-3">Yay News - Top headlines</h2>
-      <h3 className="text-center" onChange={dataMount}>
-        {props.newsCat[0].toUpperCase() + props.newsCat.slice(1)} News
+      <h3 className="text-center">
+        {category[0].toUpperCase() + category.slice(1)} News
       </h3>
       {loading && <Loading />}
       <InfiniteScroll

@@ -1,18 +1,30 @@
 import React from "react";
+import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
-import News from './News';
-export default function Navbar(props) {
-  const activeClass=(id)=>{
-    Array.from(document.getElementsByClassName('nav-link')).map((nav)=>{
-      nav.classList.remove('active')
-    })
-    document.getElementById(id).classList.add('active')
-  }
+import { categoryActions } from "../features/category/categorySlice";
+export default function Navbar() {
+  const activeCancel = () =>
+    Array.from(document.getElementsByClassName("nav-link")).map((nav) => {
+      return nav.classList.remove("active");
+    });
+  const activeClass = (id) => {
+    activeCancel()
+    return document.getElementById(id).classList.add("active");
+  };
+
+  const dispatch = useDispatch();
+
+  const changeCat = (e) => {
+    dispatch(categoryActions.change(e.target.id));
+  };
   return (
     <div>
       <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
         <div className="container-fluid">
-          <Link className="navbar-brand" to="/">
+          <Link className="navbar-brand" to="/" onClick={()=>{
+            activeCancel();
+            dispatch(categoryActions.change('general'))
+          }}>
             Yay-News
           </Link>
           <button
@@ -27,14 +39,14 @@ export default function Navbar(props) {
             <span className="navbar-toggler-icon"></span>
           </button>
           <div className="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul className="navbar-nav me-auto mb-2 mb-lg-0">
+            <ul className="navbar-nav me-auto mb-2 mb-lg-0" onClick={changeCat}>
               <li className="nav-item">
                 <Link
                   onClick={() => {
-                    activeClass('business');
+                    activeClass("business");
                   }}
                   id="business"
-                  className="nav-link active"
+                  className="nav-link"
                   aria-current="page"
                   to="/business"
                 >
@@ -44,7 +56,7 @@ export default function Navbar(props) {
               <li className="nav-item">
                 <Link
                   onClick={() => {
-                    activeClass('sports')
+                    activeClass("sports");
                   }}
                   id="sports"
                   className="nav-link"
@@ -56,7 +68,7 @@ export default function Navbar(props) {
               <li className="nav-item">
                 <Link
                   onClick={() => {
-                    activeClass('technology')
+                    activeClass("technology");
                   }}
                   id="technology"
                   className="nav-link"
@@ -68,7 +80,7 @@ export default function Navbar(props) {
               <li className="nav-item">
                 <Link
                   onClick={() => {
-                    activeClass('entertainment')
+                    activeClass("entertainment");
                   }}
                   id="entertainment"
                   className="nav-link"
@@ -80,7 +92,7 @@ export default function Navbar(props) {
               <li className="nav-item">
                 <Link
                   onClick={() => {
-                    activeClass('science')
+                    activeClass("science");
                   }}
                   id="science"
                   className="nav-link"
@@ -92,7 +104,7 @@ export default function Navbar(props) {
               <li className="nav-item">
                 <Link
                   onClick={() => {
-                    activeClass('health')
+                    activeClass("health");
                   }}
                   id="health"
                   className="nav-link"
